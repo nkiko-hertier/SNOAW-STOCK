@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" class="flex justify-center flex-col">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./Public/js/tailwind.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      *{
+        transition: 0.35s;
+      }
+      body {
+        scroll-behavior: smooth;
+      }
+      .hidden-page {
+        display: none;
+      }
+      .page{
+        background: none;
+      }
+      .page::after{
+        content: " ";
+        position: absolute;
+        top: 0;
+        right: 0;
+        filter: blur(90px);
+        height: 100px;
+        width: 100px;
+        background: rgb(255, 0, 166);
+        background-image: linear-gradient(rgba(0, 0, 255, 0.533), rgba(255, 0, 255, 0.516));
+      }
+      .page::before{
+        content: " ";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        filter: blur(90px);
+        height: 100px;
+        width: 100px;
+        background: rgb(0, 110, 255);
+      }
+      .loader{
+        animation: load 2s 1;
+      }
+    </style>
+  </head>
+  <body class=" bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
+    
+    <!-- Pages -->
+    <div id="productsPage" class="page">
+      <div class="container mx-auto py-10">
+        <h1 class="text-3xl font-bold text-center mb-5">Products</h1>
+        <form id="productForm" class="flex flex-col gap-4">
+          <input
+            id="productName"
+            type="text"
+            placeholder="Product Name"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            required
+          />
+          <input
+            id="boughtPrice"
+            type="number"
+            placeholder="Bought Price (Real Price)"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            required
+          />
+          <input
+            id="sellingPrice"
+            type="number"
+            placeholder="Selling Price"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            required
+          />
+          <input
+            id="productQuantity"
+            type="number"
+            placeholder="Quantity"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Add Product
+          </button>
+        </form>
+        <div id="productList" class="mt-5"></div>
+      </div>
+    </div>
+    <div id="homePage" class="hidden-page page relative">
+      <div
+        class="container mx-auto py-10 flex justify-center items-center flex-col"
+      >
+        <h1 style="letter-spacing: 3px;" class="text-3xl font- text-center mb-5">Welcome Back! <br/>
+            <span class="text-sm uppercase text-pink-600 font-bold">Stock-Line</span>
+        </h1>
+        <img src="./new_svg.svg" width="250px" alt="" />
+        <div class="pt-10 me grid grid-cols-4 w-full px-10 gap-2 mt-10">
+            <button class="bg-gradient-to-tl hover:scale-110 from-blue-500 to-blue-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Products</button>
+            <button class="bg-gradient-to-tl hover:scale-110 from-pink-500 to-pink-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Sales</button>
+            <button class="bg-gradient-to-tl hover:scale-110 from-lime-500 to-lime-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Reports</button>
+            <button class="bg-gradient-to-tl hover:scale-110 from-indigo-500 to-indigo-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Purchases</button>
+        </div>
+      </div>
+    </div>
+    <div id="salesPage" class="hidden-page page">
+      <div class="container mx-auto py-10">
+        <h1 class="text-3xl font-bold text-center mb-5">Sales</h1>
+        <form id="salesForm" class="flex flex-col gap-4">
+          <select id="salesProduct" class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg">
+            <option value="" disabled selected>Select Product</option>
+          </select>
+          <input
+            id="salesQuantity"
+            type="number"
+            placeholder="Sold Quantity"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+          />
+          <button
+            type="submit"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Record Sale
+          </button>
+        </form>
+        <div id="salesList" class="mt-5"></div>
+      </div>
+    </div>
+
+    <div id="purchasesPage" class="hidden-page page">
+      <div class="container mx-auto py-10">
+        <h1 class="text-3xl font-bold text-center mb-5">Purchases</h1>
+        <form id="purchaseForm" class="flex flex-col gap-4">
+          <select id="purchaseProduct" class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg">
+            <option value="" disabled selected>Select Product</option>
+          </select>
+          <input
+            id="purchaseQuantity"
+            type="number"
+            placeholder="Purchased Quantity"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+          />
+          <button
+            type="submit"
+            class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+          >
+            Record Purchase
+          </button>
+        </form>
+        <div id="purchaseList" class="mt-5"></div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 w-[400px] max-w-full bg-white border-t">
+      <div class="flex justify-around py-3">
+        <button
+          onclick="showPage('homePage')"
+          class="text-gray-500 hover:text-black"
+        >
+          <i class="bi bi-house"></i>
+          <span class="block text-xs">Home</span>
+        </button>
+        <button
+          onclick="showPage('productsPage')"
+          class="text-gray-500 hover:text-blue-500"
+        >
+          <i class="bi bi-box"></i>
+          <span class="block text-xs">Products</span>
+        </button>
+        <button
+          onclick="showPage('salesPage')"
+          class="text-gray-500 hover:text-green-500"
+        >
+          <i class="bi bi-cart-check"></i>
+          <span class="block text-xs">Sales</span>
+        </button>
+        <button
+          onclick="showPage('purchasesPage')"
+          class="text-gray-500 hover:text-purple-500"
+        >
+          <i class="bi bi-cart-plus"></i>
+          <span class="block text-xs">Purchases</span>
+        </button>
+      </div>
+    </nav>
+
+    <script>
+      // Constants
+      const STORAGE_KEY_PRODUCTS = "stock_products";
+      const STORAGE_KEY_SALES = "stock_sales";
+      const STORAGE_KEY_PURCHASES = "stock_purchases";
+
+      // Pages
+      const pages = document.querySelectorAll(".page");
+      const showPage = (id) => {
+        pages.forEach((page) => {
+          page.style.display = page.id === id ? "block" : "none";
+        });
+      };
+
+      // Get and Save Local Storage Data
+      const getProducts = () =>
+        JSON.parse(localStorage.getItem(STORAGE_KEY_PRODUCTS)) || [];
+      const getSales = () =>
+        JSON.parse(localStorage.getItem(STORAGE_KEY_SALES)) || [];
+      const getPurchases = () =>
+        JSON.parse(localStorage.getItem(STORAGE_KEY_PURCHASES)) || [];
+      const saveProducts = (products) =>
+        localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+      const saveSales = (sales) =>
+        localStorage.setItem(STORAGE_KEY_SALES, JSON.stringify(sales));
+      const savePurchases = (purchases) =>
+        localStorage.setItem(STORAGE_KEY_PURCHASES, JSON.stringify(purchases));
+
+      // Forms and List Elements
+      const productForm = document.getElementById("productForm");
+      const salesForm = document.getElementById("salesForm");
+      const purchaseForm = document.getElementById("purchaseForm");
+      const productList = document.getElementById("productList");
+      const salesList = document.getElementById("salesList");
+      const purchaseList = document.getElementById("purchaseList");
+      const salesProduct = document.getElementById("salesProduct");
+      const purchaseProduct = document.getElementById("purchaseProduct");
+
+      const RenderOption = () => {
+        const products = getProducts();
+        salesProduct.innerHTML =
+          '<option value="" disabled selected>Select Product</option>';
+        purchaseProduct.innerHTML =
+          '<option value="" disabled selected>Select Product</option>';
+        products.forEach((product, index) => {
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = product.name;
+          purchaseProduct.appendChild(option);
+        });
+        products.forEach((product, index) => {
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = product.name;
+          salesProduct.appendChild(option);
+        });
+      };
+      // Render Functions
+      const renderProducts = () => {
+        const products = getProducts();
+        productList.innerHTML = products
+          .map(
+            (product, index) => `
+      <div class="p-3 border rounded flex justify-between items-center mb-2">
+        <div>
+          <h3 class="font-bold">${product.name}</h3>
+          <p>Bought Price: $${product.boughtPrice.toFixed(2)}</p>
+          <p>Selling Price: $${product.sellingPrice.toFixed(2)}</p>
+          <p>Quantity: ${product.quantity}</p>
+        </div>
+        <button onclick="deleteProduct(${index})" class="text-red-500 hover:underline">Delete</button>
+      </div>
+    `
+          )
+          .join("");
+        RenderOption();
+      };
+
+      const renderSales = () => {
+        const sales = getSales();
+        salesList.innerHTML = sales
+          .map(
+            (sale) => `
+          <div class="p-3 border rounded mb-2">
+            <p>Product: ${sale.productName}</p>
+            <p>Sold Quantity: ${sale.quantity}</p>
+            <p>Item Price: ${sale.amount}</p>
+            <p>Date: ${new Date(sale.date).toLocaleString()}</p>
+          </div>
+        `
+          )
+          .join("");
+      };
+
+      const renderPurchases = () => {
+        const purchases = getPurchases();
+        purchaseList.innerHTML = purchases
+          .map(
+            (purchase) => `
+          <div class="p-3 border rounded mb-2">
+            <p>Product: ${purchase.productName}</p>
+            <p>Purchased Quantity: ${purchase.quantity}</p>
+            <p>Date: ${new Date(purchase.date).toLocaleString()}</p>
+          </div>
+        `
+          )
+          .join("");
+      };
+
+      // Form Handlers
+      productForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("productName").value;
+        const boughtPrice = parseFloat(
+          document.getElementById("boughtPrice").value
+        );
+        const sellingPrice = parseFloat(
+          document.getElementById("sellingPrice").value
+        );
+        const quantity = parseInt(
+          document.getElementById("productQuantity").value
+        );
+
+        if (!name || boughtPrice <= 0 || sellingPrice <= 0 || quantity <= 0) {
+          alert("Please fill out all fields with valid data!");
+          return;
+        }
+
+        const products = getProducts();
+        products.push({ name, boughtPrice, sellingPrice, quantity });
+        saveProducts(products);
+        productForm.reset();
+        renderProducts();
+      });
+
+      salesForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const productIndex = parseInt(salesProduct.value);
+        const quantity = parseInt(
+          document.getElementById("salesQuantity").value
+        );
+        const products = getProducts();
+        if (products[productIndex].quantity < quantity)
+          return alert("Not enough stock!");
+        products[productIndex].quantity -= quantity;
+        saveProducts(products);
+        const sales = getSales();
+        sales.push({
+          productName: products[productIndex].name,
+          quantity,
+          amount: products[productIndex].sellingPrice || "unknown",
+          date: new Date(),
+        });
+        saveSales(sales);
+        salesForm.reset();
+        renderProducts();
+        renderSales();
+      });
+
+      purchaseForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const productIndex = parseInt(purchaseProduct.value);
+        const quantity = parseInt(
+          document.getElementById("purchaseQuantity").value
+        );
+        const products = getProducts();
+        products[productIndex].quantity += quantity;
+        saveProducts(products);
+        const purchases = getPurchases();
+        purchases.push({
+          productName: products[productIndex].name,
+          quantity,
+          date: new Date(),
+        });
+        savePurchases(purchases);
+        purchaseForm.reset();
+        renderProducts();
+        renderPurchases();
+      });
+
+      // Initialize
+      renderProducts();
+      renderSales();
+      renderPurchases();
+      showPage("homePage");
+    </script>
+  </body>
+</html>
