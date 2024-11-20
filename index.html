@@ -52,18 +52,18 @@
       }
     </style>
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("service-worker.js")
-            .then((registration) => {
-              console.log("Service Worker registered:", registration);
-            })
-            .catch((error) => {
-              console.error("Service Worker registration failed:", error);
-            });
-        });
-      }
+    //   if ("serviceWorker" in navigator) {
+    //     window.addEventListener("load", () => {
+    //       navigator.serviceWorker
+    //         .register("service-worker.js")
+    //         .then((registration) => {
+    //           console.log("Service Worker registered:", registration);
+    //         })
+    //         .catch((error) => {
+    //           console.error("Service Worker registration failed:", error);
+    //         });
+    //     });
+    //   }
     </script>
   </head>
   <body class="bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
@@ -102,7 +102,7 @@
           <input
             id="sellingPrice"
             type="number"
-            placeholder="Selling Price"
+            placeholder="Selling Price 33"
             class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             required
           />
@@ -113,6 +113,14 @@
             class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             hidden
             value="0"
+          />
+          
+          <input
+            id="productType"
+            type="text"
+            placeholder="Product type 'carto' or 'piece(ps)'"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
+
           />
           <button
             type="submit"
@@ -394,7 +402,7 @@
         <div>
           <h3 class="font-bold">${product.name}</h3>
           <p>Bought Price: $${product.boughtPrice.toFixed(2)}</p>
-          <p>Selling Price: $${product.sellingPrice.toFixed(2)}</p>
+          <p>Typed: ${product.productType}</p>
           <p>Quantity: ${product.quantity}</p>
         </div>
         <button onclick="deleteProduct(${index})" class="text-red-500 hidden hover:underline">Delete</button>
@@ -446,6 +454,7 @@
         const sellingPrice = parseFloat(
           document.getElementById("sellingPrice").value
         );
+        const productType = document.getElementById("productType").value;
         const quantity = 0;
 
         if (!name || boughtPrice <= 0 || sellingPrice <= 0 || quantity < 0) {
@@ -454,7 +463,7 @@
         }
 
         const products = getProducts();
-        products.push({ name, boughtPrice, sellingPrice, quantity });
+        products.push({ name, boughtPrice, sellingPrice, quantity, productType });
         saveProducts(products);
         productForm.reset();
         renderProducts();
