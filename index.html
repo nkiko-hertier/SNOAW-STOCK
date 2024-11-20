@@ -52,18 +52,18 @@
       }
     </style>
     <script>
-    //   if ("serviceWorker" in navigator) {
-    //     window.addEventListener("load", () => {
-    //       navigator.serviceWorker
-    //         .register("service-worker.js")
-    //         .then((registration) => {
-    //           console.log("Service Worker registered:", registration);
-    //         })
-    //         .catch((error) => {
-    //           console.error("Service Worker registration failed:", error);
-    //         });
-    //     });
-    //   }
+        if ("serviceWorker" in navigator) {
+          window.addEventListener("load", () => {
+            navigator.serviceWorker
+              .register("service-worker.js")
+              .then((registration) => {
+                console.log("Service Worker registered:", registration);
+              })
+              .catch((error) => {
+                console.error("Service Worker registration failed:", error);
+              });
+          });
+        }
     </script>
   </head>
   <body class="bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
@@ -100,13 +100,6 @@
             required
           />
           <input
-            id="sellingPrice"
-            type="number"
-            placeholder="Selling Price 33"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
-            required
-          />
-          <input
             id="productQuantity"
             type="number"
             placeholder="Quantity"
@@ -114,13 +107,12 @@
             hidden
             value="0"
           />
-          
+
           <input
             id="productType"
             type="text"
             placeholder="Product type 'carto' or 'piece(ps)'"
             class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
-
           />
           <button
             type="submit"
@@ -214,6 +206,13 @@
             type="number"
             placeholder="Sold Quantity"
             class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
+          />
+          <input
+            id="sellingPrice"
+            type="number"
+            placeholder="Selling Price"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
+            required
           />
           <button
             type="submit"
@@ -421,7 +420,7 @@
           <div class="p-3 border rounded mb-2">
             <p>Product: ${sale.productName}</p>
             <p>Sold Quantity: ${sale.quantity}</p>
-            <p>Item Price: ${sale.amount}</p>
+            <p>Amount(money): ${sale.sellingPrice}</p>
             <p>Date: ${new Date(sale.date).toLocaleString()}</p>
           </div>
         `
@@ -451,19 +450,16 @@
         const boughtPrice = parseFloat(
           document.getElementById("boughtPrice").value
         );
-        const sellingPrice = parseFloat(
-          document.getElementById("sellingPrice").value
-        );
         const productType = document.getElementById("productType").value;
         const quantity = 0;
 
-        if (!name || boughtPrice <= 0 || sellingPrice <= 0 || quantity < 0) {
+        if (!name || boughtPrice <= 0 || quantity < 0) {
           alert("Please fill out all fields with valid data!");
           return;
         }
 
         const products = getProducts();
-        products.push({ name, boughtPrice, sellingPrice, quantity, productType });
+        products.push({ name, boughtPrice, quantity, productType });
         saveProducts(products);
         productForm.reset();
         renderProducts();
@@ -475,7 +471,10 @@
         const quantity = parseInt(
           document.getElementById("salesQuantity").value
         );
-        if (quantity <= 0) {
+        const sellingPrice = parseInt(
+          document.getElementById("sellingPrice").value
+        );
+        if (quantity <= 0 || sellingPrice <= 0) {
           alert("should be higher than 0");
           return;
         }
@@ -488,7 +487,7 @@
         sales.push({
           productName: products[productIndex].name,
           quantity,
-          amount: products[productIndex].sellingPrice || "unknown",
+          sellingPrice,
           date: new Date(),
         });
         saveSales(sales);
