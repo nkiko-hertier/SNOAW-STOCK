@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./new_svg.svg" type="image/x-icon" />
     <title>Stock Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="./Public/js/tailwind.js"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
@@ -52,6 +51,20 @@
         animation: load 2s 1;
       }
     </style>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .then((registration) => {
+              console.log("Service Worker registered:", registration);
+            })
+            .catch((error) => {
+              console.error("Service Worker registration failed:", error);
+            });
+        });
+      }
+    </script>
   </head>
   <body class="bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
     <!-- Pages -->
