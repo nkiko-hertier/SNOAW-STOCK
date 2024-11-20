@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="./new_svg.svg" type="image/x-icon">
+    <link rel="shortcut icon" href="./new_svg.svg" type="image/x-icon" />
     <title>Stock Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="./Public/js/tailwind.js"></script>
@@ -12,7 +12,7 @@
       rel="stylesheet"
     />
     <style>
-      *{
+      * {
         transition: 0.35s;
       }
       body {
@@ -21,10 +21,10 @@
       .hidden-page {
         display: none;
       }
-      .page{
+      .page {
         background: none;
       }
-      .page::after{
+      .page::after {
         content: " ";
         position: absolute;
         top: 0;
@@ -33,9 +33,12 @@
         height: 100px;
         width: 100px;
         background: rgb(255, 0, 166);
-        background-image: linear-gradient(rgba(0, 0, 255, 0.533), rgba(255, 0, 255, 0.516));
+        background-image: linear-gradient(
+          rgba(0, 0, 255, 0.533),
+          rgba(255, 0, 255, 0.516)
+        );
       }
-      .page::before{
+      .page::before {
         content: " ";
         position: absolute;
         top: 50%;
@@ -45,45 +48,56 @@
         width: 100px;
         background: rgb(0, 110, 255);
       }
-      .loader{
+      .loader {
         animation: load 2s 1;
       }
     </style>
   </head>
-  <body class=" bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
-    
+  <body class="bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
     <!-- Pages -->
     <div id="productsPage" class="page">
       <div class="container mx-auto py-10">
         <h1 class="text-3xl font-bold text-center mb-5">Products</h1>
-        <p class="hidden print:block text-sm text-center w-full text-zinc-700">Snoaw-sales report</p>
+        <p class="hidden print:block text-sm text-center w-full text-zinc-700">
+          MAE GROUP REPORT
+        </p>
+        <div class="print:hidden p-4">
+          <label
+            for="product"
+            onclick="TooggleShow('productLists', 'productForm')"
+            class="p-2 shadow-md border-transparent hover:border-black border-b-2"
+          >
+            Stock
+            <i class="bi bi-bar"></i>
+          </label>
+        </div>
         <form id="productForm" class="flex flex-col gap-4 print:hidden">
           <input
             id="productName"
             type="text"
             placeholder="Product Name"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             required
           />
           <input
             id="boughtPrice"
             type="number"
             placeholder="Bought Price (Real Price)"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             required
           />
           <input
             id="sellingPrice"
             type="number"
             placeholder="Selling Price"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             required
           />
           <input
             id="productQuantity"
             type="number"
             placeholder="Quantity"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             hidden
             value="0"
           />
@@ -94,41 +108,91 @@
             Add Product
           </button>
         </form>
-        <div class="flex py-4">
-            <button onclick="print()" class="bg-red-500 text-sm p-1 px-3 text-white ml-auto text-right">Print report</button>
+        <div id="productLists" class="hidden">
+          <div class="flex py-4">
+            <button
+              onclick="print()"
+              class="bg-red-500 text-sm p-1 px-3 text-white ml-auto text-right"
+            >
+              Print report
+            </button>
+          </div>
+          <div id="productList" class="mt-5"></div>
         </div>
-        <div id="productList" class="mt-5"></div>
       </div>
     </div>
     <div id="homePage" class="hidden-page page relative">
       <div
-        class="container mx-auto py-10 flex justify-center items-center flex-col"
+        class="container mx-auto flex justify-between h-screen py-32 items-center flex-col"
       >
-        <h1 style="letter-spacing: 3px;" class="text-3xl font- text-center mb-5">Welcome Back! <br/>
-            <span class="text-sm uppercase text-pink-600 font-bold">Stock-Line</span>
+        <h1 style="letter-spacing: 3px" class="text-3xl font- text-center mb-5">
+          Welcome Back! <br />
+          <span class="text-sm uppercase text-pink-600 font-bold"
+            >MAE GROUP STOCK</span
+          >
         </h1>
         <img src="./new_svg.svg" width="250px" alt="" />
         <div class="pt-10 me grid grid-cols-4 w-full px-10 gap-2 mt-10">
-            <button onclick="showPage('homePage')" class="bg-gradient-to-tl hidden hover:scale-110 from-lime-500 to-lime-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Reports X</button>
-            <button onclick="showPage('productsPage')" class="bg-gradient-to-tl hover:scale-110 from-blue-500 to-blue-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Products</button>
-            <button onclick="showPage('salesPage')" class="bg-gradient-to-tl hover:scale-110 from-pink-500 to-pink-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Sales</button>
-            <button onclick="showPage('purchasesPage')" class="bg-gradient-to-tl hover:scale-110 from-indigo-500 to-indigo-600 text-sm font-extralight text-white rounded-sm py-1 px-4">Purchases</button>
+          <button
+            onclick="showPage('homePage')"
+            class="bg-gradient-to-tl hidden hover:scale-110 from-lime-500 to-lime-600 text-sm font-extralight text-white rounded-sm py-1 px-4"
+          >
+            Reports X
+          </button>
+          <button
+            onclick="showPage('productsPage')"
+            class="bg-gradient-to-tl hover:scale-110 from-blue-500 to-blue-600 text-sm font-extralight text-white rounded-sm py-1 px-4"
+          >
+            Products
+          </button>
+          <button
+            onclick="showPageProduct('productLists')"
+            class="bg-gradient-to-tl hover:scale-110 from-blue-500 to-blue-600 text-sm font-extralight text-white rounded-sm py-1 px-4"
+          >
+            Stock
+          </button>
+          <button
+            onclick="showPage('salesPage')"
+            class="bg-gradient-to-tl hover:scale-110 from-pink-500 to-pink-600 text-sm font-extralight text-white rounded-sm py-1 px-4"
+          >
+            Sales
+          </button>
+          <button
+            onclick="showPage('purchasesPage')"
+            class="bg-gradient-to-tl hover:scale-110 from-indigo-500 to-indigo-600 text-sm font-extralight text-white rounded-sm py-1 px-4"
+          >
+            Purchases
+          </button>
         </div>
       </div>
     </div>
     <div id="salesPage" class="hidden-page page">
       <div class="container mx-auto py-10">
         <h1 class="text-3xl font-bold text-center mb-5">Sales</h1>
-        <p class="hidden print:block text-sm text-center w-full text-zinc-700">Snoaw-sales report</p>
+        <p class="hidden print:block text-sm text-center w-full text-zinc-700">
+          Snoaw-sales report
+        </p>
+        <div class="print:hidden p-4">
+          <label
+            onclick="TooggleShow('salesLists', 'salesForm')"
+            class="p-2 shadow-md border-transparent hover:border-black border-b-2"
+          >
+            Sales List
+            <i class="bi bi-bar"></i>
+          </label>
+        </div>
         <form id="salesForm" class="flex flex-col gap-4 print:hidden">
-          <select id="salesProduct" class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg">
+          <select
+            id="salesProduct"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
+          >
             <option value="" disabled selected>Select Product</option>
           </select>
           <input
             id="salesQuantity"
             type="number"
             placeholder="Sold Quantity"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
           />
           <button
             type="submit"
@@ -137,26 +201,49 @@
             Record Sale
           </button>
         </form>
-        <div class="flex py-4">
-            <button onclick="print()" class="bg-red-500 text-sm p-1 px-3 text-white ml-auto text-right">Print report</button>
+        <div id="salesLists" class="hidden">
+          <div class="flex py-4">
+            <button
+              onclick="print()"
+              class="bg-red-500 text-sm p-1 px-3 text-white ml-auto text-right"
+            >
+              Print report
+            </button>
+          </div>
+          <div id="salesList" class="mt-5"></div>
         </div>
-        <div id="salesList" class="mt-5"></div>
       </div>
     </div>
 
     <div id="purchasesPage" class="hidden-page page">
       <div class="container mx-auto py-10">
-        <h1 class="text-3xl font-bold text-center mb-5 print:mb-0">Purchases</h1>
-        <p class="hidden print:block text-sm text-center w-full text-zinc-700">Snoaw-sales report</p>
+        <h1 class="text-3xl font-bold text-center mb-5 print:mb-0">
+          Purchases
+        </h1>
+        <p class="hidden print:block text-sm text-center w-full text-zinc-700">
+          Snoaw-sales report
+        </p>
+        <div class="print:hidden p-4">
+          <label
+            onclick="TooggleShow('purchaseLists', 'purchaseForm')"
+            class="p-2 shadow-md border-transparent hover:border-black border-b-2"
+          >
+            Purchace List
+            <i class="bi bi-bar"></i>
+          </label>
+        </div>
         <form id="purchaseForm" class="flex flex-col gap-4 print:hidden">
-          <select id="purchaseProduct" class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg">
+          <select
+            id="purchaseProduct"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
+          >
             <option value="" disabled selected>Select Product</option>
           </select>
           <input
             id="purchaseQuantity"
             type="number"
             placeholder="Purchased Quantity"
-            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white  w-full z-30 rounded-t-lg"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
           />
           <button
             type="submit"
@@ -165,15 +252,24 @@
             Record Purchase
           </button>
         </form>
-        <div class="flex py-4">
-            <button onclick="print()" class="bg-red-500 text-sm p-1 px-3 text-white ml-auto text-right">Print report</button>
+        <div id="purchaseLists" class="hidden">
+          <div class="flex py-4">
+            <button
+              onclick="print()"
+              class="bg-red-500 text-sm p-1 px-3 text-white ml-auto text-right"
+            >
+              Print report
+            </button>
+          </div>
+          <div id="purchaseList" class="mt-5"></div>
         </div>
-        <div id="purchaseList" class="mt-5"></div>
       </div>
     </div>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 w-[400px] max-w-full bg-white border-t print:hidden">
+    <nav
+      class="fixed bottom-0 w-[400px] max-w-full bg-white border-t print:hidden"
+    >
       <div class="flex justify-around py-3">
         <button
           onclick="showPage('homePage')"
@@ -183,7 +279,7 @@
           <span class="block text-xs">Home</span>
         </button>
         <button
-          onclick="showPage('productsPage')"
+          onclick="showPageProduct('productForm')"
           class="text-gray-500 hover:text-blue-500"
         >
           <i class="bi bi-box"></i>
@@ -205,7 +301,19 @@
         </button>
       </div>
     </nav>
-
+    <script>
+      function TooggleShow(item1, item2, show = 0) {
+        const element1 = document.getElementById(item1);
+        const element2 = document.getElementById(item2);
+        element1.classList.toggle("hidden");
+        element2.classList.toggle("hidden");
+        if (show) {
+          element1.classList.add("hidden");
+          element2.classList.add("hidden");
+          document.getElementById(show).classList.remove("hidden");
+        }
+      }
+    </script>
     <script>
       // Constants
       const STORAGE_KEY_PRODUCTS = "stock_products";
@@ -276,7 +384,7 @@
           <p>Selling Price: $${product.sellingPrice.toFixed(2)}</p>
           <p>Quantity: ${product.quantity}</p>
         </div>
-        <button onclick="deleteProduct(${index})" class="text-red-500 hover:underline">Delete</button>
+        <button onclick="deleteProduct(${index})" class="text-red-500 hidden hover:underline">Delete</button>
       </div>
     `
           )
@@ -345,9 +453,9 @@
         const quantity = parseInt(
           document.getElementById("salesQuantity").value
         );
-        if(quantity <= 0){
-            alert('should be higher than 0');
-            return;
+        if (quantity <= 0) {
+          alert("should be higher than 0");
+          return;
         }
         const products = getProducts();
         if (products[productIndex].quantity < quantity)
@@ -373,9 +481,9 @@
         const quantity = parseInt(
           document.getElementById("purchaseQuantity").value
         );
-        if(quantity <= 0){
-            alert('should be higher than 0');
-            return;
+        if (quantity <= 0) {
+          alert("should be higher than 0");
+          return;
         }
         const products = getProducts();
         products[productIndex].quantity += quantity;
@@ -397,6 +505,10 @@
       renderSales();
       renderPurchases();
       showPage("homePage");
+      function showPageProduct(show) {
+        showPage("productsPage");
+        TooggleShow("productLists", "productForm", show);
+      }
     </script>
   </body>
 </html>
