@@ -134,6 +134,8 @@
         </div>
       </div>
     </div>
+
+    <!-- HOME PAGE  -->
     <div id="homePage" class="hidden-page page relative">
       <div
         class="container mx-auto flex justify-between h-screen py-32 items-center flex-col"
@@ -179,6 +181,8 @@
         </div>
       </div>
     </div>
+
+    <!-- SALES PAGE -->
     <div id="salesPage" class="hidden-page page">
       <div class="container mx-auto py-10">
         <h1 class="text-3xl font-bold text-center mb-5">Sales</h1>
@@ -213,6 +217,14 @@
             placeholder="Selling Price"
             class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             required
+          />
+
+          <!-- product_type can be carto or piece -->
+          <input
+            id="productType"
+            type="text"
+            placeholder="Product type 'carto' or 'piece(ps)'"
+            class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
           />
           <button
             type="submit"
@@ -420,6 +432,7 @@
           <div class="p-3 border rounded mb-2">
             <p>Product: ${sale.productName}</p>
             <p>Sold Quantity: ${sale.quantity}</p>
+            <p>Sell type: ${sale.selltype}</p>
             <p>Amount(money): ${sale.sellingPrice}</p>
             <p>Date: ${new Date(sale.date).toLocaleString()}</p>
           </div>
@@ -474,6 +487,7 @@
         const sellingPrice = parseInt(
           document.getElementById("sellingPrice").value
         );
+        const selltype = document.getElementById("sellingPrice").value || 'unknown';
         if (quantity <= 0 || sellingPrice <= 0) {
           alert("should be higher than 0");
           return;
@@ -487,6 +501,7 @@
         sales.push({
           productName: products[productIndex].name,
           quantity,
+          selltype,
           sellingPrice,
           date: new Date(),
         });
