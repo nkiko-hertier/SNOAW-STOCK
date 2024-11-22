@@ -52,18 +52,18 @@
       }
     </style>
     <script>
-        if ("serviceWorker" in navigator) {
-          window.addEventListener("load", () => {
-            navigator.serviceWorker
-              .register("service-worker.js")
-              .then((registration) => {
-                console.log("Service Worker registered:", registration);
-              })
-              .catch((error) => {
-                console.error("Service Worker registration failed:", error);
-              });
-          });
-        }
+        // if ("serviceWorker" in navigator) {
+        //   window.addEventListener("load", () => {
+        //     navigator.serviceWorker
+        //       .register("service-worker.js")
+        //       .then((registration) => {
+        //         console.log("Service Worker registered:", registration);
+        //       })
+        //       .catch((error) => {
+        //         console.error("Service Worker registration failed:", error);
+        //       });
+        //   });
+        // }
     </script>
   </head>
   <body class="bg-zinc-50 text-gray-800 w-[400px] max-w-full mx-auto">
@@ -218,7 +218,6 @@
             class="shadow-lg border-b-2 border-blue-500 p-2 bg-white w-full z-30 rounded-t-lg"
             required
           />
-
           <!-- product_type can be carto or piece -->
           <input
             id="productType"
@@ -409,48 +408,96 @@
         productList.innerHTML = products
           .map(
             (product, index) => `
-      <div class="p-3 border rounded flex justify-between items-center mb-2">
-        <div>
-          <h3 class="font-bold">${product.name}</h3>
-          <p>Bought Price: $${product.boughtPrice.toFixed(2)}</p>
-          <p>Typed: ${product.productType}</p>
-          <p>Quantity: ${product.quantity}</p>
-        </div>
-        <button onclick="deleteProduct(${index})" class="text-red-500 hidden hover:underline">Delete</button>
-      </div>
-    `
+              <div class="p-3 border rounded flex justify-between items-center mb-2">
+                <div>
+                  <h3 class="font-bold">${product.name}</h3>
+                  <p>Bought Price: $${product.boughtPrice.toFixed(2)}</p>
+                  <p>Typed: ${product.productType}</p>
+                  <p>Quantity: ${product.quantity}</p>
+                </div>
+                <button onclick="deleteProduct(${index})" class="text-red-500 hover:underline">Delete</button>
+              </div>
+          `
           )
           .join("");
         RenderOption();
       };
 
+      const deleteProduct = (index) => {
+        // first delete all sales and purchaces with the same product ID
+        const sales = getSales();
+        const purchases = getPurchases();
+        const products = getProducts();
+
+        const confirme = confirm("are you sure you need to delete product?");
+        if(confirme){
+          console.log('Ok you accepted');
+        }
+        const selected = products[index] ? index : 0;
+        if(selected){
+          sales.forEach((sale, saleIndex) => {
+          if (sale.productId === index) {
+            deleteSale(saleIndex);
+          }
+          });
+          purchases.forEach((purchase, purchaseIndex) => {
+            if (purchase.productId === index) {
+              deletePurchase(purchaseIndex);
+            }
+          });
+          products.splice(selected, 1);
+          saveProducts(products);
+          RenderOption();
+          renderProducts();
+          console.log("item not found");
+        } else {
+          console.log("failed to delete item");
+        }
+          // delete product
+      };
       const renderSales = () => {
         const sales = getSales();
         salesList.innerHTML = sales
           .map(
-            (sale) => `
-          <div class="p-3 border rounded mb-2">
-            <p>Product: ${sale.productName}</p>
-            <p>Sold Quantity: ${sale.quantity}</p>
-            <p>Sell type: ${sale.selltype}</p>
-            <p>Amount(money): ${sale.sellingPrice}</p>
-            <p>Date: ${new Date(sale.date).toLocaleString()}</p>
-          </div>
+            (sale, index) => `
+              <div class="p-3 border rounded flex justify-between items-center mb-2">
+                <div class="p-3 border rounded mb-2">
+                  <p>Product: ${sale.productName}</p>
+                  <p>Sold Quantity: ${sale.quantity}</p>
+                  <p>Sell type: ${sale.selltype}</p>
+                  <p>Amount(money): ${sale.sellingPrice}</p>
+                  <p>Date: ${new Date(sale.date).toLocaleString()}</p>
+                </div>
+                <button onclick="deleteSale(${index})" class="text-red-500 hover:underline">Delete</button>
+            </div>
         `
           )
           .join("");
       };
 
+      const deleteSale = (index) => {
+        const sales = getSales();
+        sales.splice(index, 1);
+        RenderOption();
+      }
+      const deletePurchase = (index) => {
+        const purchases = getPurchase();
+        purchases.splice(index, 1);
+        RenderOption();
+      }
       const renderPurchases = () => {
         const purchases = getPurchases();
         purchaseList.innerHTML = purchases
           .map(
             (purchase) => `
-          <div class="p-3 border rounded mb-2">
-            <p>Product: ${purchase.productName}</p>
-            <p>Purchased Quantity: ${purchase.quantity}</p>
-            <p>Date: ${new Date(purchase.date).toLocaleString()}</p>
-          </div>
+            <div class="p-3 border rounded flex justify-between items-center mb-2">
+              <div class="p-3 border rounded mb-2">
+                <p>Product: ${purchase.productName}</p>
+                <p>Purchased Quantity: ${purchase.quantity}</p>
+                <p>Date: ${new Date(purchase.date).toLocaleString()}</p>
+              </div>
+              <button onclick="deletePurchase(${index})" class="text-red-500 hover:underline">Delete</button>
+            </div>
         `
           )
           .join("");
