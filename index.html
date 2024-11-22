@@ -468,7 +468,7 @@
                   <p>Amount(money): ${sale.sellingPrice}</p>
                   <p>Date: ${new Date(sale.date).toLocaleString()}</p>
                 </div>
-                <button onclick="deleteSale(${index})" class="text-red-500 hover:underline">Delete</button>
+                <button onclick="deleteSale(${index || null})" class="text-red-500 hover:underline">Delete</button>
             </div>
         `
           )
@@ -478,18 +478,22 @@
       const deleteSale = (index) => {
         const sales = getSales();
         sales.splice(index, 1);
+        saveSales(sales);
         RenderOption();
+        renderSales();
       }
       const deletePurchase = (index) => {
-        const purchases = getPurchase();
+        const purchases = getPurchases();
         purchases.splice(index, 1);
+        savePurchases(purchases);
         RenderOption();
+        renderPurchases();
       }
       const renderPurchases = () => {
         const purchases = getPurchases();
         purchaseList.innerHTML = purchases
           .map(
-            (purchase) => `
+            (purchase, index) => `
             <div class="p-3 border rounded flex justify-between items-center mb-2">
               <div class="p-3 border rounded mb-2">
                 <p>Product: ${purchase.productName}</p>
