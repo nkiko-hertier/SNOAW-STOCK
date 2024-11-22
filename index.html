@@ -431,29 +431,33 @@
 
         const confirme = confirm("are you sure you need to delete product?");
         if(confirme){
-          console.log('Ok you accepted');
-        }
-        const selected = products[index] ? index : 0;
-        if(selected){
-          sales.forEach((sale, saleIndex) => {
-          if (sale.productId === index) {
-            deleteSale(saleIndex);
-          }
-          });
-          purchases.forEach((purchase, purchaseIndex) => {
-            if (purchase.productId === index) {
-              deletePurchase(purchaseIndex);
+        const sales = getSales();
+        const purchases = getPurchases();
+        const products = getProducts();
+        const selected = products[index] ? index : null;
+          if((selected !== null)){
+            products.splice(selected, 1);
+            saveProducts(products);
+            renderProducts();
+
+            // sales
+            sales.forEach((sale, saleIndex) => {
+            if (sale.productId === index) {
+              deleteSale(saleIndex);
             }
-          });
-          products.splice(selected, 1);
-          saveProducts(products);
-          RenderOption();
-          renderProducts();
-          console.log("item not found");
-        } else {
-          console.log("failed to delete item");
+            });
+            purchases.forEach((purchase, purchaseIndex) => {
+              if (purchase.productId === index) {
+                deletePurchase(purchaseIndex);
+              }
+            });
+            RenderOption();
+            renderProducts();
+            alert("sucessfully deleted!");
+          } else {
+            alert("Failed to download!", selected);
+          }
         }
-          // delete product
       };
       const renderSales = () => {
         const sales = getSales();
