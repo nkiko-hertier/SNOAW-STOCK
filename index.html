@@ -469,7 +469,7 @@
                   <p>Product: ${sale.productName}</p>
                   <p>Sold Quantity: ${sale.quantity}</p>
                   <p>Sell type: ${sale.selltype}</p>
-                  <p>Total Amount: ${sale.sellingPrice * sale.selltype}</p>
+                  <p>Total Amount: $${sale.sellingPrice * sale.selltype}</p>
                   <p>Date: ${new Date(sale.date).toLocaleString()}</p>
                 </div>
                 <button onclick="deleteSale(${index || null})" class="text-red-500 hover:underline">Delete</button>
